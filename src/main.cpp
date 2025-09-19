@@ -115,12 +115,12 @@ int main(void)
       for(int i=0;i<circleManager.size();++i)
       {
         circleDetails& currentCircle = circleManager[i].first;
-        DrawCircle(currentCircle.x,currentCircle.y,currentCircle.size,colorsFaded[circleManager[i].second]);
+        DrawCircle(currentCircle.x + (cos(framesDown) * (framesDown/10)),currentCircle.y + (sin(framesDown) * (framesDown/10)),currentCircle.size,colorsFaded[circleManager[i].second]);
       }
 
       for(int i=0;i<speechCaptionsLoc.size();++i)
       {
-        DrawText(textToSpeechPrompt.c_str(),speechCaptionsLoc[i].x - (MeasureText(textToSpeechPrompt.c_str(),20) / 2),speechCaptionsLoc[i].y + 20,20,BLACK);
+        DrawText(textToSpeechPrompt.c_str(),(speechCaptionsLoc[i].x - (MeasureText(textToSpeechPrompt.c_str(),20) / 2)) + (cos(framesDown) * (framesDown/10)),(speechCaptionsLoc[i].y + 20) + (sin(framesDown) * (framesDown/10)),20,BLACK);
       }
 
       DrawText(exampleText.c_str(),(screenWidth/2) - (MeasureText(exampleText.c_str(),fontSize+1) / 2),(screenHeight/2) - ((fontSize+1)/2),fontSize+1,RAYWHITE);
