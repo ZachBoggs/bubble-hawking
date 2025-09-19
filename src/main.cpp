@@ -52,7 +52,7 @@ int main(void)
     //  circleDetails,color index
     vector<pair<circleDetails,int>> circleManager;
 
-    string textToSpeechPrompt("Bubbles");
+    string textToSpeechPrompt("Bubble");
 
     espeak_Initialize(AUDIO_OUTPUT_PLAYBACK,0,nullptr,0);
     espeak_SetVoiceByName("en-us-nyc");
@@ -64,13 +64,17 @@ int main(void)
 
     int framesDown(0);
 
+    vector<Vector2> speechCaptionsLoc;
+
     while (!WindowShouldClose())
     {
       if(IsKeyDown(KEY_SPACE))
       {
         colorIndex = GetRandomValue(0,4);
+        Vector2 circleLocation{(float)GetRandomValue(0,screenWidth),(float)GetRandomValue(0,screenHeight)};
+        speechCaptionsLoc.push_back(circleLocation);
 
-        circleDetails newCircle(GetRandomValue(0,screenWidth),GetRandomValue(0,screenHeight));
+        circleDetails newCircle((int)circleLocation.x,(int)circleLocation.y);
 
         pair<circleDetails,int> newPair(newCircle,colorIndex);
 
@@ -99,9 +103,11 @@ int main(void)
 
         if(circleManager[i].first.size >= circleManager[i].first.maxSize)
         {
+          speechCaptionsLoc.erase(speechCaptionsLoc.begin() + i);
           circleManager.erase(circleManager.begin() + i);
         }
       }
+
 
       BeginDrawing();
       ClearBackground(RAYWHITE);
@@ -110,6 +116,11 @@ int main(void)
       {
         circleDetails& currentCircle = circleManager[i].first;
         DrawCircle(currentCircle.x,currentCircle.y,currentCircle.size,colorsFaded[circleManager[i].second]);
+      }
+
+      for(int i=0;i<speechCaptionsLoc.size();++i)
+      {
+        DrawText(textToSpeechPrompt.c_str(),speechCaptionsLoc[i].x - (MeasureText(textToSpeechPrompt.c_str(),20) / 2),speechCaptionsLoc[i].y + 20,20,BLACK);
       }
 
       DrawText(exampleText.c_str(),(screenWidth/2) - (MeasureText(exampleText.c_str(),fontSize+1) / 2),(screenHeight/2) - ((fontSize+1)/2),fontSize+1,RAYWHITE);
